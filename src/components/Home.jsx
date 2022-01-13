@@ -1,27 +1,26 @@
-import React, { createContext } from "react";
-import { Container, Row, Col, NavItem } from "react-bootstrap";
+import React, { Component } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import { Component } from "react/cjs/react.development";
-import { getEmployees } from "../services/employee-services";
-import EmployeeList from "./EmployeeList";
-import SearchBar from "./SearchBar";
+import EmployeeList from './EmployeeList';
+import SearchBar from './SearchBar';
 
-export const EmployeeContext = React.createContext()
+export const EmployeeContext = React.createContext();
 
 class Home extends Component {
+
     constructor(props) {
-        super(props);
+        super(props); //number of emps :2
+
         this.state = {
-            employees: props.employees,
-            filteredResult: props.employees
+            employees: props.employees, // 2 
+            filteredResult: props.employees //2
         }
         this.handleSearch = this.handleSearch.bind(this);
     }
 
-    //lifecycle
-    static getDerivedStateFromProps(newProps, state) {
-        console.log("Props changed", newProps)
-        if (newProps.employees.length != state.employees.length) {
+    //lifecycle method which is called automatically after constructor or when props change
+    static getDerivedStateFromProps(newProps, oldState) {
+        if (newProps.employees.length != oldState.employees.length) {
             console.log("Props changed", newProps)
             return {
                 employees: newProps.employees,
@@ -33,32 +32,26 @@ class Home extends Component {
 
     async componentDidMount() {
         // let employees = await getEmployees()
-        // .catch(err=> console.log("Error in loading employee data" + err))
-        // this.setState ({employees,filteredResult : employees }) // equivalent to {employees: employees}
-        // console.log(employees)
+        //     .catch(err => console.log("Error in loading employee data"));
+        // this.setState({ employees, filteredResult: employees }); //equivalent to { employees:employees}
     }
 
     handleSearch(searchText) {
-        // do search text and update state
-        console.log(searchText);
         if (searchText && searchText.length > 0) {
             searchText = searchText.toUpperCase();
-            let filteredResult = this.state.employees.filter((item) => item.Name.toUpperCase().indexOf(searchText) >= 0
-                || item.LocationID.toUpperCase().indexOf(searchText) >= 0);
-            this.setState({ filteredResult });
-        }
-        else {
+            let filteredResult = this.state.employees.filter((item) => item.Name.toUpperCase().indexOf(searchText) >= 0 || item.Location.toUpperCase().indexOf(searchText) >= 0)
+            this.setState({ filteredResult })
+        } else {
             this.setState({ filteredResult: this.state.employees })
         }
     }
 
     render() {
-        console.log(this.state)
-        return <EmployeeContext.Provider value={{ employees: this.state.employees, data: this.state.filteredResult, doSearch: this.handleSearch }} >
+        return <EmployeeContext.Provider value={{ employees: this.state.employees, data: this.state.filteredResult, doSearch: this.handleSearch }}>
             <Container>
                 <Row>
                     <Col>
-                        <h2>Home </h2>
+                        <h2>Home</h2>
                         <SearchBar />
                         <EmployeeList />
                     </Col>
@@ -68,16 +61,14 @@ class Home extends Component {
     }
 }
 
-// Map redux store state values to properties of component
-function mapStateToProps(globalState) {
+//Map reduxstore state values to properties of component
+function mapStateToProps(state) {
     return {
-        //homecomponentPropertyName:stateValue
-        employees: globalState.employeeState.employees
+        //homecomponentPropetyName: stateValue
+        employees: state.employeeState.employees
     }
 }
 
-// function mapDispatchToProps(state){
 
-// }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, null)(Home);

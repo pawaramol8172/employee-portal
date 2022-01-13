@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Table } from "react-bootstrap";
-import { useParams } from 'react-router-dom'
-//import { getEmployee } from '../services/employee-services';
-import { getEmployee } from '../Actions/action-creators';
+import { Col, Container, Row, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { getEmployee} from '../actions/action-creators';
 
-function EmployeeDetails({ getEmployee, employee }) {
+function EmployeeDetail({ getEmployee, employee }) {
+
     const { locId, ecode } = useParams();
-
-    useEffect(async () => {
-        async function fetchEnployee() {
+    
+    useEffect(() => {
+        async function fetchEmployee() {
             getEmployee(locId, ecode);
         }
-        fetchEnployee();
-    }, [locId, ecode]); //if  locId or ecode updated then only useEffect will execute
+        fetchEmployee();
+    }, [locId, ecode]); //if locId or ecode is updated then only useEffect will execute
 
-    return (<React.Fragment> {employee && CreateUI()}</React.Fragment>)
+    return (<React.Fragment> {employee && createTable()}</React.Fragment>)
 
-    function CreateUI() {
+    function createTable() {
         return (<Container>
             <Row>
                 <Col className="col-md-6 mx-auto">
@@ -29,10 +29,6 @@ function EmployeeDetails({ getEmployee, employee }) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>Location Id</th>
-                                <td>{employee.LocationID}</td>
-                            </tr>
                             <tr>
                                 <th>Name</th>
                                 <td>{employee.Name}</td>
@@ -65,17 +61,16 @@ function EmployeeDetails({ getEmployee, employee }) {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        employee: state.employeeState.employee
+function mapStateToProps(state){
+    return{
+        employee:state.employeeState.employee
     }
 }
-
-function mapDispatchToProps(dispatch) {
-    let actionMap = {
+function mapDispatchToProps(dispatch){
+    let actionMap={
         getEmployee
     }
-    return bindActionCreators(actionMap, dispatch);
+    return bindActionCreators(actionMap,dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetails);
+export default connect(mapStateToProps,mapDispatchToProps)(EmployeeDetail);

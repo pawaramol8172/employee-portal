@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
-import employeeReducers from "./employee-reducer"
+import employeeReducer from "./employee-reducer";
 
 const rootReducer = combineReducers({
-    employeeState:employeeReducers,
+    employeeState: employeeReducer,
+    //customerState:customerReducer
+    //productState:productState
     //Add more reducers
+});
 
-})
-
-export default rootReducer;
+export default rootReducer; 

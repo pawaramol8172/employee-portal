@@ -4,33 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers/reducer'
+import rootReducer from './reducers/reducer';
 import { applyMiddleware, createStore } from 'redux';
-import { loadEmployees } from './Actions/action-creators';
+import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk  from 'redux-thunk';
 
 const store = createStore(rootReducer, composeWithDevTools(
-  applyMiddleware(thunk)
-));
-
-
-// let sampleData=[
-//   {LocationID:'Mum',EmpCode:'EMP1', Name:'Shashi', Age:26, Department:'DEPT1', Designation:'Manager',Location:'Mumbai',Address:'Mumbai001'},
-//   {LocationID:'Mum2',EmpCode:'EMP2', Name:'Amol2', Age:26, Department:'DEPT2', Designation:'Manager',Location:'Mumbai',Address:'Mumbai002'}
-// ]
-
-// store.dispatch(loadEmployees(sampleData));
-
-// console.log(store.getState());
+    applyMiddleware(thunk))
+);
 
 ReactDOM.render(
-  <Provider store={store}>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
